@@ -6,7 +6,7 @@ public enum LogLevel {
     DEBUG("\033[1;36m"),
     INFO("\033[1;34m"),
     WARN("\033[1;93m"),
-    FATAL("\033[1;31m");
+    ERROR("\033[1;31m");
 
     @Getter
     final String color;

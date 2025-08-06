@@ -10,18 +10,36 @@ public class ConfigurationLoader {
 
     public static void loadConfig(Class<?> configClass) {
         for (Field field : configClass.getDeclaredFields()) {
-            if (field.isAnnotationPresent(ConfigurationOption.class)) {
-                ConfigurationOption option = field.getAnnotation(ConfigurationOption.class);
-                String envValue = dotenv.get(option.value());
+            if (!field.isAnnotationPresent(ConfigurationOption.class)) continue;
 
-                if (envValue != null) {
-                    try {
-                        field.setAccessible(true);
-                        field.set(null, envValue);
-                    } catch (Exception e) {
-                        throw new RuntimeException("Erro ao carregar configuração: " + field.getName(), e);
-                    }
+            ConfigurationOption option = field.getAnnotation(ConfigurationOption.class);
+            String envValue = dotenv.get(option.value());
+
+            if (envValue == null) continue;
+
+            try {
+                field.setAccessible(true);
+                Class<?> type = field.getType();
+
+                Object parsedValue;
+
+                if (type == String.class) {
+                    parsedValue = envValue;
+                } else if (type == int.class || type == Integer.class) {
+                    parsedValue = Integer.parseInt(envValue);
+                } else if (type == boolean.class || type == Boolean.class) {
+                    parsedValue = Boolean.parseBoolean(envValue);
+                } else if (type.isEnum()) {
+                    @SuppressWarnings("unchecked")
+                    Class<? extends Enum> enumType = (Class<? extends Enum>) type;
+                    parsedValue = Enum.valueOf(enumType, envValue.toUpperCase());
+                } else {
+                    throw new RuntimeException("Tipo não suportado: " + type.getName());
                 }
+
+                field.set(null, parsedValue);
+            } catch (Exception e) {
+                throw new RuntimeException("Erro ao carregar configuração: " + field.getName(), e);
             }
         }
     }

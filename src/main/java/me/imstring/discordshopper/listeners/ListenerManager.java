@@ -15,7 +15,7 @@ public class ListenerManager {
         try {
             classPath = ClassPath.from(getClass().getClassLoader());
         } catch (Exception e) {
-            Logger.fatal(e);
+            Logger.error(e);
             return;
         }
 
@@ -29,7 +29,7 @@ public class ListenerManager {
 
                 instance.getJdaBuilder().addEventListeners(listenerInstance);
             } catch (Exception e) {
-                Logger.fatal(e);
+                Logger.error(e);
             }
         }
     }

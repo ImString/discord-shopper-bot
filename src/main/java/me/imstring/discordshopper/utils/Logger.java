@@ -23,17 +23,17 @@ public class Logger {
         print(LogLevel.WARN, message);
     }
 
-    public static void fatal(Object... message) {
-        print(LogLevel.FATAL, message);
+    public static void error(Object... message) {
+        print(LogLevel.ERROR, message);
     }
 
-    public static void fatal(Throwable e) {
+    public static void error(Throwable e) {
         System.out.println(e.getMessage());
         e.printStackTrace();
     }
 
-    public static void fatal(Throwable e, Object... message) {
-        print(LogLevel.FATAL, message);
+    public static void error(Throwable e, Object... message) {
+        print(LogLevel.ERROR, message);
     }
 
     private static void print(LogLevel logLevel, Object... message) {

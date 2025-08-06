@@ -23,7 +23,7 @@ public class CommandManager {
         try {
             classPath = ClassPath.from(getClass().getClassLoader());
         } catch (Exception e) {
-            Logger.fatal(e);
+            Logger.error(e);
             return;
         }
 
@@ -37,7 +37,7 @@ public class CommandManager {
                     Logger.info("Registered command: " + command.getName());
                 }
             } catch (Exception e) {
-                Logger.fatal(e);
+                Logger.error(e);
             }
         }
     }
