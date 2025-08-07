@@ -11,6 +11,7 @@ import me.imstring.discordshopper.database.providers.HikariMySQL;
 import me.imstring.discordshopper.database.providers.MySQL;
 import me.imstring.discordshopper.database.providers.SQLite;
 import me.imstring.discordshopper.listeners.ListenerManager;
+import me.imstring.discordshopper.services.GuildSettingsService;
 import me.imstring.discordshopper.utils.Logger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -35,9 +36,24 @@ public class Core {
 
     private @Getter Database database;
 
+    // Service's
+    private @Getter GuildSettingsService guildSettingsService;
+
     public void onLoad() {
         if (!setupDatabase()) {
             Logger.error("Failed to connect to the database. Please check your configuration.");
+            Logger.error("Exiting the application...");
+            System.exit(1);
+            return;
+        }
+
+        guildSettingsService = new GuildSettingsService(this);
+
+        try {
+            guildSettingsService.registerTable();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Logger.error("Failed to register table's: " + e.getMessage());
             Logger.error("Exiting the application...");
             System.exit(1);
             return;

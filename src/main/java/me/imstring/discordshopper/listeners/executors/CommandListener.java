@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.imstring.discordshopper.Core;
 import me.imstring.discordshopper.commands.DiscordAbstractCommand;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +27,16 @@ public class CommandListener extends ListenerAdapter {
             command.execute(event, instance);
         } catch (Exception e) {
             event.reply("Tivemos um problema ao executar o comando: " + e.getMessage()).setEphemeral(true).queue();
+        }
+    }
+
+    @Override
+    public void onCommandAutoCompleteInteraction(@NotNull CommandAutoCompleteInteractionEvent event) {
+        String commandName = event.getName();
+        DiscordAbstractCommand command = instance.getCommandManager().getCommand(commandName);
+
+        if (command != null) {
+            command.onAutoComplete(event);
         }
     }
 

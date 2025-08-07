@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.imstring.discordshopper.Core;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -34,6 +35,9 @@ public abstract class DiscordAbstractCommand {
     }
 
     public abstract void execute(SlashCommandInteractionEvent event, Core instance);
+
+    public void onAutoComplete(CommandAutoCompleteInteractionEvent event) {
+    }
 
     public @NonNull String getName() {
         return this.name;
