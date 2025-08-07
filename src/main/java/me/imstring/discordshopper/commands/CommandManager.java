@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import me.imstring.discordshopper.Core;
 import me.imstring.discordshopper.utils.Logger;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,13 +45,19 @@ public class CommandManager {
     }
 
     public void loadSlashCommands(Guild guild) {
-        for (DiscordAbstractCommand command : mainCommands.values()) {
-            guild.updateCommands()
-                    .addCommands(Commands.slash(command.getName(), command.getDescription()))
-                    .queue();
+        List<SlashCommandData> commands = mainCommands.values().stream().map(cmd -> {
+            SlashCommandData slash = Commands.slash(cmd.getName(), cmd.getDescription()).addOptions(cmd.getOptions());
+            if (cmd.getDefaultPermissions() != null) {
+                slash.setDefaultPermissions(DefaultMemberPermissions.enabledFor(cmd.getDefaultPermissions()));
+            }
+            return slash;
+        }).toList();
 
-            Logger.info("Loaded slash command: " + command.getName() + " for guild " + guild.getName());
-        }
+        guild.updateCommands().addCommands(commands).queue(success -> {
+            for (DiscordAbstractCommand command : mainCommands.values()) {
+                Logger.info("Loaded slash command: " + command.getName() + " for guild " + guild.getName());
+            }
+        }, failure -> Logger.error("Failed to load slash commands for guild " + guild.getName() + ": " + failure.getMessage()));
     }
 
     public List<String> getCommandNames() {

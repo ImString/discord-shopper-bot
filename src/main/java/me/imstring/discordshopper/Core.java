@@ -21,11 +21,13 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.awt.Color;
 
 public class Core {
 
     private @Getter CommandManager commandManager;
     private @Getter ListenerManager listenerManager;
+    public @Getter Color embedDefaultColor = new Color(107, 170, 255);
 
     private @Getter JDA jda;
     private @Getter JDABuilder jdaBuilder;

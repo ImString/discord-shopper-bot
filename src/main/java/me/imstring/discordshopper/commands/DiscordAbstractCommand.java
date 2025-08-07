@@ -1,13 +1,21 @@
 package me.imstring.discordshopper.commands;
 
+import lombok.Getter;
 import lombok.NonNull;
 import me.imstring.discordshopper.Core;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class DiscordAbstractCommand {
 
     private final @NonNull String name;
     private final @NonNull String description;
+    private @Getter Collection<Permission> defaultPermissions;
 
     public DiscordAbstractCommand(@NonNull String name) {
         this.name = name;
@@ -17,6 +25,12 @@ public abstract class DiscordAbstractCommand {
     public DiscordAbstractCommand(@NonNull String name, @NonNull String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public DiscordAbstractCommand(@NonNull String name, @NonNull String description, Collection<Permission> defaultPermissions) {
+        this.name = name;
+        this.description = description;
+        this.defaultPermissions = defaultPermissions;
     }
 
     public abstract void execute(SlashCommandInteractionEvent event, Core instance);
@@ -29,4 +43,7 @@ public abstract class DiscordAbstractCommand {
         return this.description;
     }
 
+    public List<OptionData> getOptions() {
+        return Collections.emptyList();
+    }
 }
