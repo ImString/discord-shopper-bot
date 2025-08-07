@@ -1,4 +1,4 @@
-package me.imstring.discordshopper.configuration;
+package me.imstring.discordshopper.configurations;
 
 import me.imstring.discordshopper.database.DatabaseType;
 import me.imstring.discordshopper.utils.ConfigurationOption;

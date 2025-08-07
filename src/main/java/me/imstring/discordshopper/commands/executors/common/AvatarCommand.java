@@ -2,7 +2,7 @@ package me.imstring.discordshopper.commands.executors.common;
 
 import me.imstring.discordshopper.Core;
 import me.imstring.discordshopper.commands.DiscordAbstractCommand;
-import me.imstring.discordshopper.configuration.ApplicationConfig;
+import me.imstring.discordshopper.configurations.ApplicationConfig;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

@@ -2,9 +2,11 @@ package me.imstring.discordshopper;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.Getter;
-import me.imstring.discordshopper.configuration.ApplicationConfig;
-import me.imstring.discordshopper.configuration.DatabaseConfig;
-import me.imstring.discordshopper.configuration.DiscordConfig;
+
+import me.imstring.discordshopper.configurations.ApplicationConfig;
+import me.imstring.discordshopper.configurations.DatabaseConfig;
+import me.imstring.discordshopper.configurations.DiscordConfig;
+
 import me.imstring.discordshopper.utils.ConfigurationLoader;
 
 public class Runner {

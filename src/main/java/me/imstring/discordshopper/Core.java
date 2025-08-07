@@ -2,8 +2,9 @@ package me.imstring.discordshopper;
 
 import lombok.Getter;
 import me.imstring.discordshopper.commands.CommandManager;
-import me.imstring.discordshopper.configuration.DatabaseConfig;
-import me.imstring.discordshopper.configuration.DiscordConfig;
+import me.imstring.discordshopper.configurations.ApplicationConfig;
+import me.imstring.discordshopper.configurations.DatabaseConfig;
+import me.imstring.discordshopper.configurations.DiscordConfig;
 import me.imstring.discordshopper.database.Database;
 import me.imstring.discordshopper.database.DatabaseType;
 import me.imstring.discordshopper.database.providers.HikariMySQL;
@@ -27,7 +28,7 @@ public class Core {
 
     private @Getter CommandManager commandManager;
     private @Getter ListenerManager listenerManager;
-    public @Getter Color embedDefaultColor = new Color(107, 170, 255);
+    public @Getter Color embedDefaultColor = Color.decode(ApplicationConfig.COLOR);
 
     private @Getter JDA jda;
     private @Getter JDABuilder jdaBuilder;
