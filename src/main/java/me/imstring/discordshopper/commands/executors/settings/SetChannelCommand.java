@@ -1,6 +1,6 @@
 package me.imstring.discordshopper.commands.executors.settings;
 
-import me.imstring.discordshopper.embeds.EmbedFactory;
+import me.imstring.discordshopper.components.ComponentFactory;
 import me.imstring.discordshopper.enums.GuildChannelsType;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
@@ -12,7 +12,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.Command.Choice;
 import me.imstring.discordshopper.Core;
 import me.imstring.discordshopper.commands.DiscordAbstractCommand;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -74,16 +73,14 @@ public class SetChannelCommand extends DiscordAbstractCommand {
             return;
         }
 
-        EmbedFactory embedFactory = new EmbedFactory(instance);
+        ComponentFactory componentFactory = new ComponentFactory(instance);
         MessageChannel messageChannel = (MessageChannel) channel;
 
         switch (type) {
-            case VERIFICATION -> messageChannel.sendMessageEmbeds(embedFactory.settingsVerification(event.getGuild()).build()).addActionRow(
-                    Button.primary("verify", "🔒 Verifique-se")
-            ).queue();
-            case CART -> messageChannel.sendMessageEmbeds(embedFactory.settingsCart(event.getGuild()).build()).addActionRow(
-                    Button.success("manage-cart", "\uD83D\uDED2 Gerenciar Carrinho")
-            ).queue();
+            case VERIFICATION ->
+                    messageChannel.sendMessageComponents(componentFactory.settingsVerification(event.getGuild())).useComponentsV2().queue();
+            case CART ->
+                    messageChannel.sendMessageComponents(componentFactory.settingsCart(event.getGuild())).useComponentsV2().queue();
         }
 
         event.reply("✅ Canal `" + type + "` configurado para: " + channel.getAsMention()).queue();
