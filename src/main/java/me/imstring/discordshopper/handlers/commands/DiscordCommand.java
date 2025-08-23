@@ -1,4 +1,4 @@
-package me.imstring.discordshopper.commands;
+package me.imstring.discordshopper.handlers.commands;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -12,23 +12,23 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class DiscordAbstractCommand {
+public abstract class DiscordCommand {
 
     private final @NonNull String name;
     private final @NonNull String description;
     private @Getter Collection<Permission> defaultPermissions;
 
-    public DiscordAbstractCommand(@NonNull String name) {
+    public DiscordCommand(@NonNull String name) {
         this.name = name;
         this.description = "No description provided.";
     }
 
-    public DiscordAbstractCommand(@NonNull String name, @NonNull String description) {
+    public DiscordCommand(@NonNull String name, @NonNull String description) {
         this.name = name;
         this.description = description;
     }
 
-    public DiscordAbstractCommand(@NonNull String name, @NonNull String description, Collection<Permission> defaultPermissions) {
+    public DiscordCommand(@NonNull String name, @NonNull String description, Collection<Permission> defaultPermissions) {
         this.name = name;
         this.description = description;
         this.defaultPermissions = defaultPermissions;

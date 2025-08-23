@@ -1,8 +1,8 @@
-package me.imstring.discordshopper.listeners.executors;
+package me.imstring.discordshopper.handlers.listeners.executors;
 
 import lombok.RequiredArgsConstructor;
 import me.imstring.discordshopper.Core;
-import me.imstring.discordshopper.commands.DiscordAbstractCommand;
+import me.imstring.discordshopper.handlers.commands.DiscordCommand;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -17,7 +17,7 @@ public class CommandListener extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         String commandName = event.getName();
-        DiscordAbstractCommand command = instance.getCommandManager().getCommand(commandName);
+        DiscordCommand command = instance.getCommandManager().getCommand(commandName);
         if (command == null) {
             event.reply("Comando não encontrado!").setEphemeral(true).queue();
             return;
@@ -33,7 +33,7 @@ public class CommandListener extends ListenerAdapter {
     @Override
     public void onCommandAutoCompleteInteraction(@NotNull CommandAutoCompleteInteractionEvent event) {
         String commandName = event.getName();
-        DiscordAbstractCommand command = instance.getCommandManager().getCommand(commandName);
+        DiscordCommand command = instance.getCommandManager().getCommand(commandName);
 
         if (command != null) {
             command.onAutoComplete(event);

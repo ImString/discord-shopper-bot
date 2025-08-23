@@ -1,4 +1,4 @@
-package me.imstring.discordshopper.listeners;
+package me.imstring.discordshopper.handlers.listeners;
 
 import com.google.common.reflect.ClassPath;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,9 @@ public class ListenerManager {
 
     private final Core instance;
 
-    public void register() {
+    public void registerAll() {
+        Logger.info("Registering listeners...");
+
         ClassPath classPath;
         try {
             classPath = ClassPath.from(getClass().getClassLoader());
@@ -19,7 +21,7 @@ public class ListenerManager {
             return;
         }
 
-        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive("me.imstring.discordshopper.listeners.executors")) {
+        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive("me.imstring.discordshopper.handlers.listeners.executors")) {
             try {
                 Class<?> clazz = classInfo.load();
                 Object listenerInstance = clazz.getDeclaredConstructor(Core.class).newInstance(instance);
@@ -28,6 +30,7 @@ public class ListenerManager {
                 }
 
                 instance.getJdaBuilder().addEventListeners(listenerInstance);
+                Logger.info("Registered listener: " + clazz.getSimpleName());
             } catch (Exception e) {
                 Logger.error(e);
             }

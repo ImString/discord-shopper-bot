@@ -1,7 +1,7 @@
 package me.imstring.discordshopper;
 
 import lombok.Getter;
-import me.imstring.discordshopper.commands.CommandManager;
+import me.imstring.discordshopper.handlers.commands.CommandManager;
 import me.imstring.discordshopper.configurations.ApplicationConfig;
 import me.imstring.discordshopper.configurations.DatabaseConfig;
 import me.imstring.discordshopper.configurations.DiscordConfig;
@@ -10,7 +10,8 @@ import me.imstring.discordshopper.database.DatabaseType;
 import me.imstring.discordshopper.database.providers.HikariMySQL;
 import me.imstring.discordshopper.database.providers.MySQL;
 import me.imstring.discordshopper.database.providers.SQLite;
-import me.imstring.discordshopper.listeners.ListenerManager;
+import me.imstring.discordshopper.handlers.interactions.InteractionManager;
+import me.imstring.discordshopper.handlers.listeners.ListenerManager;
 import me.imstring.discordshopper.services.GuildSettingsService;
 import me.imstring.discordshopper.utils.Logger;
 import net.dv8tion.jda.api.JDA;
@@ -27,8 +28,10 @@ import java.awt.Color;
 
 public class Core {
 
-    private @Getter CommandManager commandManager;
+    private @Getter InteractionManager interactionManager;
     private @Getter ListenerManager listenerManager;
+    private @Getter CommandManager commandManager;
+
     public @Getter Color embedDefaultColor = Color.decode(ApplicationConfig.COLOR);
 
     private @Getter JDA jda;
@@ -66,11 +69,14 @@ public class Core {
         jdaBuilder.setChunkingFilter(ChunkingFilter.ALL);
         jdaBuilder.enableCache(CacheFlag.ONLINE_STATUS);
 
+        interactionManager = new InteractionManager(this);
+        interactionManager.registerAll();
+
         listenerManager = new ListenerManager(this);
-        listenerManager.register();
+        listenerManager.registerAll();
 
         commandManager = new CommandManager(this);
-        commandManager.register();
+        commandManager.registerAll();
 
         jda = jdaBuilder.build();
     }

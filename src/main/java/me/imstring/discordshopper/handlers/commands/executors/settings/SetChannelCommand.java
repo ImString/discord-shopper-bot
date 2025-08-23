@@ -1,4 +1,4 @@
-package me.imstring.discordshopper.commands.executors.settings;
+package me.imstring.discordshopper.handlers.commands.executors.settings;
 
 import me.imstring.discordshopper.components.ComponentFactory;
 import me.imstring.discordshopper.enums.GuildChannelsType;
@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.Command.Choice;
 import me.imstring.discordshopper.Core;
-import me.imstring.discordshopper.commands.DiscordAbstractCommand;
+import me.imstring.discordshopper.handlers.commands.DiscordCommand;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SetChannelCommand extends DiscordAbstractCommand {
+public class SetChannelCommand extends DiscordCommand {
     private final List<String> channelsTypes = Arrays.stream(GuildChannelsType.values()).toList()
             .stream()
             .map(GuildChannelsType::name)

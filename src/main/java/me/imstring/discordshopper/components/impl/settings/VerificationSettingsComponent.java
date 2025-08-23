@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.components.separator.Separator;
 import net.dv8tion.jda.api.components.textdisplay.TextDisplay;
 import net.dv8tion.jda.api.entities.Guild;
 
-public class VerificationSettingsEmbeds extends Component {
+public class VerificationSettingsComponent extends Component {
 
     public Container create(Core instance, Guild guild) {
         return Container.of(

@@ -1,4 +1,4 @@
-package me.imstring.discordshopper.commands;
+package me.imstring.discordshopper.handlers.commands;
 
 import com.google.common.reflect.ClassPath;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +16,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CommandManager {
 
-    private static final Map<String, DiscordAbstractCommand> mainCommands = new HashMap<>();
+    private static final Map<String, DiscordCommand> mainCommands = new HashMap<>();
 
     private final Core instance;
 
-    public void register() {
+    public void registerAll() {
+        Logger.info("Registering commands...");
+
         ClassPath classPath;
         try {
             classPath = ClassPath.from(getClass().getClassLoader());
@@ -29,11 +31,11 @@ public class CommandManager {
             return;
         }
 
-        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive("me.imstring.discordshopper.commands.executors")) {
+        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive("me.imstring.discordshopper.handlers.commands.executors")) {
             try {
                 Class<?> clazz = classInfo.load();
-                if (DiscordAbstractCommand.class.isAssignableFrom(clazz) && !clazz.isInterface() && !clazz.isLocalClass()) {
-                    DiscordAbstractCommand command = (DiscordAbstractCommand) clazz.getDeclaredConstructor().newInstance();
+                if (DiscordCommand.class.isAssignableFrom(clazz) && !clazz.isInterface() && !clazz.isLocalClass()) {
+                    DiscordCommand command = (DiscordCommand) clazz.getDeclaredConstructor().newInstance();
                     mainCommands.put(command.getName(), command);
 
                     Logger.info("Registered command: " + command.getName());
@@ -54,7 +56,7 @@ public class CommandManager {
         }).toList();
 
         guild.updateCommands().addCommands(commands).queue(success -> {
-            for (DiscordAbstractCommand command : mainCommands.values()) {
+            for (DiscordCommand command : mainCommands.values()) {
                 Logger.info("Loaded slash command: " + command.getName() + " for guild " + guild.getName());
             }
         }, failure -> Logger.error("Failed to load slash commands for guild " + guild.getName() + ": " + failure.getMessage()));
@@ -64,7 +66,7 @@ public class CommandManager {
         return mainCommands.keySet().stream().toList();
     }
 
-    public DiscordAbstractCommand getCommand(String name) {
+    public DiscordCommand getCommand(String name) {
         return mainCommands.get(name);
     }
 }

@@ -1,7 +1,7 @@
-package me.imstring.discordshopper.commands.executors.common;
+package me.imstring.discordshopper.handlers.commands.executors.common;
 
 import me.imstring.discordshopper.Core;
-import me.imstring.discordshopper.commands.DiscordAbstractCommand;
+import me.imstring.discordshopper.handlers.commands.DiscordCommand;
 import me.imstring.discordshopper.configurations.ApplicationConfig;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.List;
 
-public class AvatarCommand extends DiscordAbstractCommand {
+public class AvatarCommand extends DiscordCommand {
     public AvatarCommand() {
         super("avatar", "Confira o avatar de um usuário.");
     }

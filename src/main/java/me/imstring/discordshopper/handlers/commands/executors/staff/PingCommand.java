@@ -1,7 +1,7 @@
-package me.imstring.discordshopper.commands.executors.staff;
+package me.imstring.discordshopper.handlers.commands.executors.staff;
 
 import me.imstring.discordshopper.Core;
-import me.imstring.discordshopper.commands.DiscordAbstractCommand;
+import me.imstring.discordshopper.handlers.commands.DiscordCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class PingCommand extends DiscordAbstractCommand {
+public class PingCommand extends DiscordCommand {
     public PingCommand() {
         super("ping", "Verifique se o bot está online.", new ArrayList<>(Collections.singleton(Permission.ADMINISTRATOR)));
     }

@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.components.textdisplay.TextDisplay;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.components.container.Container;
 
-public class CartSettingsEmbeds extends Component {
+public class CartSettingsComponent extends Component {
 
     public Container create(Core instance, Guild guild) {
         return Container.of(
