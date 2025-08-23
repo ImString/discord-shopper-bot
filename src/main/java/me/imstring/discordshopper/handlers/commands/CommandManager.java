@@ -31,7 +31,7 @@ public class CommandManager {
             return;
         }
 
-        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive("me.imstring.discordshopper.handlers.commands.executors")) {
+        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(this.getClass().getPackageName() + ".executors")) {
             try {
                 Class<?> clazz = classInfo.load();
                 if (DiscordCommand.class.isAssignableFrom(clazz) && !clazz.isInterface() && !clazz.isLocalClass()) {

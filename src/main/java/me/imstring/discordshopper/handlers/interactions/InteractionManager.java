@@ -25,7 +25,7 @@ public class InteractionManager {
             return;
         }
 
-        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive("me.imstring.discordshopper.handlers.interactions.executors")) {
+        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(this.getClass().getPackageName() + ".executors")) {
             try {
                 Class<?> clazz = classInfo.load();
                 if (DiscordInteraction.class.isAssignableFrom(clazz) && !clazz.isInterface() && !clazz.isLocalClass()) {

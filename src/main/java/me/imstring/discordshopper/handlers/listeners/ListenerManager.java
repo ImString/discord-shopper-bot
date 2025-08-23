@@ -21,7 +21,7 @@ public class ListenerManager {
             return;
         }
 
-        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive("me.imstring.discordshopper.handlers.listeners.executors")) {
+        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(this.getClass().getPackageName() + ".executors")) {
             try {
                 Class<?> clazz = classInfo.load();
                 Object listenerInstance = clazz.getDeclaredConstructor(Core.class).newInstance(instance);
