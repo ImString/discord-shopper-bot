@@ -12,7 +12,7 @@ import me.imstring.discordshopper.database.providers.MySQL;
 import me.imstring.discordshopper.database.providers.SQLite;
 import me.imstring.discordshopper.handlers.interactions.InteractionManager;
 import me.imstring.discordshopper.handlers.listeners.ListenerManager;
-import me.imstring.discordshopper.services.GuildSettingsService;
+import me.imstring.discordshopper.repositories.GuildSettingsRepository;
 import me.imstring.discordshopper.utils.Logger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -40,7 +40,7 @@ public class Core {
     private @Getter Database database;
 
     // Service's
-    private @Getter GuildSettingsService guildSettingsService;
+    private @Getter GuildSettingsRepository guildSettingsService;
 
     public void onLoad() {
         if (!setupDatabase()) {
@@ -50,7 +50,7 @@ public class Core {
             return;
         }
 
-        guildSettingsService = new GuildSettingsService(this);
+        guildSettingsService = new GuildSettingsRepository(this);
 
         try {
             guildSettingsService.registerTable();

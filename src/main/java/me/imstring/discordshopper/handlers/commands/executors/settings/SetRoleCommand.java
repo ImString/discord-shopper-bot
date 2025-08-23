@@ -44,6 +44,7 @@ public class SetRoleCommand extends DiscordCommand {
 
         Role role = event.getOption("role").getAsRole();
 
+//        instance.getDatabase().update("");
         event.reply("Cargo " + role.getAsMention() + " definido com sucesso como ``" + type.name() + "``!").setEphemeral(true).queue();
     }
 

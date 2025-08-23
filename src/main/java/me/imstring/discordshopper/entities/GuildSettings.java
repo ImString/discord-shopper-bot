@@ -1,7 +1,6 @@
 package me.imstring.discordshopper.entities;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
 public class GuildSettings {
