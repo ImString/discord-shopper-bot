@@ -7,12 +7,11 @@ import net.dv8tion.jda.api.components.buttons.Button;
 import net.dv8tion.jda.api.components.buttons.ButtonStyle;
 import net.dv8tion.jda.api.components.separator.Separator;
 import net.dv8tion.jda.api.components.textdisplay.TextDisplay;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.components.container.Container;
 
 public class CartSettingsComponent extends Component {
 
-    public Container create(Core instance, Guild guild) {
+    public Container create(Core instance) {
         return Container.of(
                 TextDisplay.of(String.join("\n",
                         "# \uD83D\uDED2 Monte seu pedido aqui!",

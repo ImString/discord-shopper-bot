@@ -11,12 +11,13 @@ import net.dv8tion.jda.api.entities.Guild;
 public class ComponentFactory {
 
     private final Core core;
+    private final Guild guild;
 
-    public Container settingsVerification(Guild guild) {
-        return new VerificationSettingsComponent().create(core, guild);
+    public Container settingsVerification() {
+        return new VerificationSettingsComponent().create(this.core, this.guild);
     }
 
-    public Container settingsCart(Guild guild) {
-        return new CartSettingsComponent().create(core, guild);
+    public Container settingsCart() {
+        return new CartSettingsComponent().create(this.core, this.guild);
     }
 }

@@ -33,25 +33,6 @@ public class SetChannelCommand extends DiscordCommand {
     }
 
     @Override
-    public List<OptionData> getOptions() {
-        return List.of(
-                new OptionData(
-                        OptionType.STRING,
-                        "type",
-                        "Insira o tipo de canal que deseja definir.",
-                        true,
-                        true
-                ),
-                new OptionData(
-                        OptionType.CHANNEL,
-                        "channel",
-                        "Selecione o canal que deseja definir.",
-                        true
-                )
-        );
-    }
-
-    @Override
     public void execute(@NotNull SlashCommandInteractionEvent event, Core instance) {
         GuildChannelsType type;
 
@@ -73,17 +54,36 @@ public class SetChannelCommand extends DiscordCommand {
             return;
         }
 
-        ComponentFactory componentFactory = new ComponentFactory(instance);
+        ComponentFactory componentFactory = new ComponentFactory(instance, event.getGuild());
         MessageChannel messageChannel = (MessageChannel) channel;
 
         switch (type) {
             case VERIFICATION ->
-                    messageChannel.sendMessageComponents(componentFactory.settingsVerification(event.getGuild())).useComponentsV2().queue();
+                    messageChannel.sendMessageComponents(componentFactory.settingsVerification()).useComponentsV2().queue();
             case CART ->
-                    messageChannel.sendMessageComponents(componentFactory.settingsCart(event.getGuild())).useComponentsV2().queue();
+                    messageChannel.sendMessageComponents(componentFactory.settingsCart()).useComponentsV2().queue();
         }
 
-        event.reply("✅ Canal `" + type + "` configurado para: " + channel.getAsMention()).queue();
+        event.reply("✅ Canal `" + type + "` configurado para: " + channel.getAsMention()).setEphemeral(true).queue();
+    }
+
+    @Override
+    public List<OptionData> getOptions() {
+        return List.of(
+                new OptionData(
+                        OptionType.STRING,
+                        "type",
+                        "Insira o tipo de canal que deseja definir.",
+                        true,
+                        true
+                ),
+                new OptionData(
+                        OptionType.CHANNEL,
+                        "channel",
+                        "Selecione o canal que deseja definir.",
+                        true
+                )
+        );
     }
 
     @Override
