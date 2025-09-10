@@ -1,7 +1,8 @@
 package me.imstring.discordshopper.repositories;
 
 import java.sql.SQLException;
-import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 
 public interface Repository<T> {
     void save(T entity) throws SQLException;
@@ -10,9 +11,9 @@ public interface Repository<T> {
 
     void delete(T entity) throws SQLException;
 
+    Optional<T> findById(String id) throws SQLException;
+
+    List<T> findAll() throws SQLException;
+
     void registerTable() throws SQLException;
-
-    T findById(String id) throws SQLException;
-
-    Iterator<T> findAll() throws SQLException;
 }

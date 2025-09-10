@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInterac
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +35,7 @@ public abstract class DiscordCommand {
         this.defaultPermissions = defaultPermissions;
     }
 
-    public abstract void execute(SlashCommandInteractionEvent event, Core instance);
+    public abstract void execute(SlashCommandInteractionEvent event, Core instance) throws SQLException;
 
     public void onAutoComplete(CommandAutoCompleteInteractionEvent event) {
     }

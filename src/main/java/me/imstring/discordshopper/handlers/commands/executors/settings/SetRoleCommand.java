@@ -1,9 +1,11 @@
 package me.imstring.discordshopper.handlers.commands.executors.settings;
 
 import me.imstring.discordshopper.Core;
+import me.imstring.discordshopper.entities.GuildSettings;
 import me.imstring.discordshopper.enums.GuildChannelsType;
 import me.imstring.discordshopper.enums.GuildRolesType;
 import me.imstring.discordshopper.handlers.commands.DiscordCommand;
+import me.imstring.discordshopper.repositories.GuildSettingsRepository;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -13,10 +15,8 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.sql.SQLException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SetRoleCommand extends DiscordCommand {
@@ -42,10 +42,29 @@ public class SetRoleCommand extends DiscordCommand {
             return;
         }
 
+        GuildSettingsRepository guildSettingsRepository = new GuildSettingsRepository(instance);
+        Optional<GuildSettings> guildSettingsOpt = guildSettingsRepository.findByGuildId(event.getGuild().getId());
+
+        if (guildSettingsOpt.isEmpty()) {
+            event.reply("❌ Seu servidor não está cadastrado, consulte o provedor!").setEphemeral(true).queue();
+            return;
+        }
+
+        GuildSettings guildSettings = guildSettingsOpt.get();
         Role role = event.getOption("role").getAsRole();
 
-//        instance.getDatabase().update("");
-        event.reply("Cargo " + role.getAsMention() + " definido com sucesso como ``" + type.name() + "``!").setEphemeral(true).queue();
+        try {
+            if (type == GuildRolesType.AUTO_ROLE) {
+                guildSettings.setMemberAutoRoleId(role.getId());
+            } else if (type == GuildRolesType.AUTHENTICATION) {
+                guildSettings.setMemberAuthenticationRoleId(role.getId());
+            }
+
+            guildSettingsRepository.update(guildSettings);
+            event.reply("Cargo " + role.getAsMention() + " definido com sucesso como ``" + type.name() + "``!").setEphemeral(true).queue();
+        } catch (SQLException err) {
+            event.reply("Tivemos um problema ao salvar o novo cargo!").setEphemeral(true).queue();
+        }
     }
 
     @Override

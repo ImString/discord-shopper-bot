@@ -1,10 +1,12 @@
 package me.imstring.discordshopper.entities;
 
 import lombok.Data;
+import lombok.AllArgsConstructor;
 
 @Data
+@AllArgsConstructor
 public class GuildSettings {
-    private int id;
+    private Integer id;
 
     private String guildId;
 
@@ -17,14 +19,10 @@ public class GuildSettings {
 
     // Role's
     private String memberAutoRoleId;
+    private String memberAuthenticationRoleId;
 
-    public GuildSettings(int id, String guildId, String verificationChannelId, String welcomeChannelId, String logsChannelId, String ticketsChannelId, String cartChannelId) {
-        this.id = id;
+    public GuildSettings(String guildId) {
+        this.id = null;
         this.guildId = guildId;
-        this.verificationChannelId = verificationChannelId;
-        this.welcomeChannelId = welcomeChannelId;
-        this.logsChannelId = logsChannelId;
-        this.ticketsChannelId = ticketsChannelId;
-        this.cartChannelId = cartChannelId;
     }
 }

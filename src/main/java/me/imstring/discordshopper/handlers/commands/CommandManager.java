@@ -46,19 +46,25 @@ public class CommandManager {
         }
     }
 
-    public void loadSlashCommands(Guild guild) {
-        List<SlashCommandData> commands = mainCommands.values().stream().map(cmd -> {
-            SlashCommandData slash = Commands.slash(cmd.getName(), cmd.getDescription()).addOptions(cmd.getOptions());
-            if (cmd.getDefaultPermissions() != null) {
-                slash.setDefaultPermissions(DefaultMemberPermissions.enabledFor(cmd.getDefaultPermissions()));
-            }
-            return slash;
-        }).toList();
+    public void loadSlashCommands(Guild guild, List<String> commandNamesToLoad) {
+        List<SlashCommandData> commands = mainCommands.entrySet().stream()
+                .filter(entry -> commandNamesToLoad.contains(entry.getKey()))
+                .map(entry -> {
+                    DiscordCommand cmd = entry.getValue();
+                    SlashCommandData slash = Commands.slash(cmd.getName(), cmd.getDescription())
+                            .addOptions(cmd.getOptions());
+                    if (cmd.getDefaultPermissions() != null) {
+                        slash.setDefaultPermissions(DefaultMemberPermissions.enabledFor(cmd.getDefaultPermissions()));
+                    }
+                    return slash;
+                })
+                .toList();
 
         guild.updateCommands().addCommands(commands).queue(success -> {
-            for (DiscordCommand command : mainCommands.values()) {
-                Logger.info("Loaded slash command: " + command.getName() + " for guild " + guild.getName());
+            for (String cmdName : commandNamesToLoad) {
+                Logger.info("Loaded slash command: \"" + cmdName + "\" for guild \"" + guild.getName() + "\"");
             }
+            Logger.info("Finish load commands in guild \"" + guild.getName() + "\"");
         }, failure -> Logger.error("Failed to load slash commands for guild " + guild.getName() + ": " + failure.getMessage()));
     }
 

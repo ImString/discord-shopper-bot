@@ -5,38 +5,48 @@ import me.imstring.discordshopper.Core;
 import me.imstring.discordshopper.database.Database;
 import me.imstring.discordshopper.entities.GuildSettings;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class GuildSettingsRepository implements Repository<GuildSettings> {
 
     private final Core instance;
 
+    private static final String SELECT_COLUMNS = "id, guild_id, verification_channel, welcome_channel, logs_channel, tickets_channel, cart_channel, member_role, authentication_role";
+    private static final String SELECT_BY_ID_SQL = "SELECT " + SELECT_COLUMNS + " FROM guild_settings WHERE id = ?";
+    private static final String SELECT_BY_GUILD_ID_SQL = "SELECT " + SELECT_COLUMNS + " FROM guild_settings WHERE guild_id = ?";
+    private static final String SELECT_ALL_SQL = "SELECT " + SELECT_COLUMNS + " FROM guild_settings";
+
     @Override
     public void save(GuildSettings entity) throws SQLException {
         instance.getDatabase().update(
-                "INSERT INTO guild_settings (guild_id, verification_channel, welcome_channel, logs_channel, tickets_channel, cart_channel) VALUES (?, ?, ?, ?, ?, ?)",
+                "INSERT INTO guild_settings (guild_id, verification_channel, welcome_channel, logs_channel, tickets_channel, cart_channel, member_role, authentication_role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 entity.getGuildId(),
                 entity.getVerificationChannelId(),
                 entity.getWelcomeChannelId(),
                 entity.getLogsChannelId(),
                 entity.getTicketsChannelId(),
-                entity.getCartChannelId()
+                entity.getCartChannelId(),
+                entity.getMemberAutoRoleId(),
+                entity.getMemberAuthenticationRoleId()
         );
     }
 
     @Override
     public void update(GuildSettings entity) throws SQLException {
         instance.getDatabase().update(
-                "UPDATE guild_settings SET verification_channel = ?, welcome_channel = ?, logs_channel = ?, tickets_channel = ?, cart_channel = ? WHERE guild_id = ?",
+                "UPDATE guild_settings SET verification_channel = ?, welcome_channel = ?, logs_channel = ?, tickets_channel = ?, cart_channel = ?, member_role = ?, authentication_role = ? WHERE guild_id = ?",
                 entity.getVerificationChannelId(),
                 entity.getWelcomeChannelId(),
                 entity.getLogsChannelId(),
                 entity.getTicketsChannelId(),
                 entity.getCartChannelId(),
+                entity.getMemberAutoRoleId(),
+                entity.getMemberAuthenticationRoleId(),
                 entity.getGuildId()
         );
     }
@@ -50,82 +60,66 @@ public class GuildSettingsRepository implements Repository<GuildSettings> {
     }
 
     @Override
+    public Optional<GuildSettings> findById(String id) {
+        try (Database.Query query = instance.getDatabase().query(SELECT_BY_ID_SQL, id)) {
+            if (query.resultSet.next()) {
+                return Optional.of(mapResultSet(query.resultSet));
+            }
+            return Optional.empty();
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<GuildSettings> findByGuildId(String guildId) {
+        try (Database.Query query = instance.getDatabase().query(SELECT_BY_GUILD_ID_SQL, guildId)) {
+            if (query.resultSet.next()) {
+                return Optional.of(mapResultSet(query.resultSet));
+            }
+            return Optional.empty();
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<GuildSettings> findAll() throws SQLException {
+        List<GuildSettings> list = new ArrayList<>();
+        try (Database.Query query = instance.getDatabase().query(SELECT_ALL_SQL)) {
+            while (query.resultSet.next()) {
+                list.add(mapResultSet(query.resultSet));
+            }
+        }
+        return list;
+    }
+
+    @Override
     public void registerTable() throws SQLException {
         instance.getDatabase().update("CREATE TABLE IF NOT EXISTS guild_settings (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY, " +
-                "guild_id VARCHAR(20), " +
-                "verification_channel VARCHAR(20), " +
-                "welcome_channel VARCHAR(20), " +
-                "logs_channel VARCHAR(20), " +
-                "tickets_channel VARCHAR(20), " +
-                "cart_channel VARCHAR(20)" +
+                "guild_id VARCHAR(20) NULL, " +
+                "verification_channel VARCHAR(20) NULL, " +
+                "welcome_channel VARCHAR(20) NULL, " +
+                "logs_channel VARCHAR(20) NULL, " +
+                "tickets_channel VARCHAR(20) NULL, " +
+                "cart_channel VARCHAR(20) NULL, " +
+                "member_role VARCHAR(20) NULL, " +
+                "authentication_role VARCHAR(20) NULL" +
                 ");"
         );
     }
 
-    @Override
-    public GuildSettings findById(String id) throws SQLException {
-        Database.Query query = instance.getDatabase().query(
-                "SELECT id, guild_id, verification_channel, welcome_channel, logs_channel, tickets_channel, cart_channel FROM guild_settings WHERE id = ?",
-                id
-        );
-
-        if (!query.resultSet.next()) {
-            return null;
-        }
-
+    private GuildSettings mapResultSet(ResultSet rs) throws SQLException {
         return new GuildSettings(
-                query.resultSet.getInt("id"),
-                query.resultSet.getString("guild_id"),
-                query.resultSet.getString("verification_channel"),
-                query.resultSet.getString("welcome_channel"),
-                query.resultSet.getString("logs_channel"),
-                query.resultSet.getString("tickets_channel"),
-                query.resultSet.getString("cart_channel")
+                rs.getInt("id"),
+                rs.getString("guild_id"),
+                rs.getString("verification_channel"),
+                rs.getString("welcome_channel"),
+                rs.getString("logs_channel"),
+                rs.getString("tickets_channel"),
+                rs.getString("cart_channel"),
+                rs.getString("member_role"),
+                rs.getString("authentication_role")
         );
     }
-
-    public GuildSettings findByGuildId(String guildId) throws SQLException {
-        Database.Query query = instance.getDatabase().query(
-                "SELECT id, guild_id, verification_channel, welcome_channel, logs_channel, tickets_channel, cart_channel FROM guild_settings WHERE guild_id = ?",
-                guildId
-        );
-
-        if (!query.resultSet.next()) {
-            return null;
-        }
-
-        return new GuildSettings(
-                query.resultSet.getInt("id"),
-                query.resultSet.getString("guild_id"),
-                query.resultSet.getString("verification_channel"),
-                query.resultSet.getString("welcome_channel"),
-                query.resultSet.getString("logs_channel"),
-                query.resultSet.getString("tickets_channel"),
-                query.resultSet.getString("cart_channel")
-        );
-    }
-
-    @Override
-    public Iterator<GuildSettings> findAll() throws SQLException {
-        Database.Query query = instance.getDatabase().query(
-                "SELECT id, guild_id, verification_channel, welcome_channel, logs_channel, tickets_channel, cart_channel FROM guild_settings"
-        );
-
-        List<GuildSettings> list = new ArrayList<>();
-        while (query.resultSet.next()) {
-            list.add(new GuildSettings(
-                    query.resultSet.getInt("id"),
-                    query.resultSet.getString("guild_id"),
-                    query.resultSet.getString("verification_channel"),
-                    query.resultSet.getString("welcome_channel"),
-                    query.resultSet.getString("logs_channel"),
-                    query.resultSet.getString("tickets_channel"),
-                    query.resultSet.getString("cart_channel")
-            ));
-        }
-
-        return list.iterator();
-    }
-
 }
