@@ -12,10 +12,10 @@ public class GuildSettings {
 
     // Channel's
     private String welcomeChannelId;
-    private String verificationChannelId;
     private String logsChannelId;
-    private String ticketsChannelId;
-    private String cartChannelId;
+
+    // Category's
+    private String ticketsCategoryId;
 
     // Role's
     private String memberAutoRoleId;

@@ -45,7 +45,7 @@ public class InteractionManager {
         for (DiscordInteraction interaction : interactions) {
             if (interaction.getOptions().getCustomIds().stream().anyMatch(identifier::matches)) {
                 found = true;
-                interaction.exec(data, identifier);
+                interaction.exec(data, identifier, instance);
                 break;
             }
         }

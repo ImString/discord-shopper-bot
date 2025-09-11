@@ -10,14 +10,15 @@ import net.dv8tion.jda.api.entities.Guild;
 @RequiredArgsConstructor
 public class ComponentFactory {
 
-    private final Core core;
+    private final Core instance;
     private final Guild guild;
 
     public Container settingsVerification() {
-        return new VerificationSettingsComponent().create(this.core, this.guild);
+        VerificationSettingsComponent component = new VerificationSettingsComponent();
+        return component.create(this.instance, this.guild);
     }
 
     public Container settingsCart() {
-        return new CartSettingsComponent().create(this.core, this.guild);
+        return new CartSettingsComponent().create(this.instance, this.guild);
     }
 }

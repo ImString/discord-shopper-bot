@@ -16,7 +16,7 @@ public class GuildSettingsRepository implements Repository<GuildSettings> {
 
     private final Core instance;
 
-    private static final String SELECT_COLUMNS = "id, guild_id, verification_channel, welcome_channel, logs_channel, tickets_channel, cart_channel, member_role, authentication_role";
+    private static final String SELECT_COLUMNS = "id, guild_id, welcome_channel, logs_channel, tickets_category, member_role, authentication_role";
     private static final String SELECT_BY_ID_SQL = "SELECT " + SELECT_COLUMNS + " FROM guild_settings WHERE id = ?";
     private static final String SELECT_BY_GUILD_ID_SQL = "SELECT " + SELECT_COLUMNS + " FROM guild_settings WHERE guild_id = ?";
     private static final String SELECT_ALL_SQL = "SELECT " + SELECT_COLUMNS + " FROM guild_settings";
@@ -24,13 +24,11 @@ public class GuildSettingsRepository implements Repository<GuildSettings> {
     @Override
     public void save(GuildSettings entity) throws SQLException {
         instance.getDatabase().update(
-                "INSERT INTO guild_settings (guild_id, verification_channel, welcome_channel, logs_channel, tickets_channel, cart_channel, member_role, authentication_role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO guild_settings (guild_id, welcome_channel, logs_channel, tickets_category, member_role, authentication_role) VALUES (?, ?, ?, ?, ?, ?)",
                 entity.getGuildId(),
-                entity.getVerificationChannelId(),
                 entity.getWelcomeChannelId(),
                 entity.getLogsChannelId(),
-                entity.getTicketsChannelId(),
-                entity.getCartChannelId(),
+                entity.getTicketsCategoryId(),
                 entity.getMemberAutoRoleId(),
                 entity.getMemberAuthenticationRoleId()
         );
@@ -39,12 +37,10 @@ public class GuildSettingsRepository implements Repository<GuildSettings> {
     @Override
     public void update(GuildSettings entity) throws SQLException {
         instance.getDatabase().update(
-                "UPDATE guild_settings SET verification_channel = ?, welcome_channel = ?, logs_channel = ?, tickets_channel = ?, cart_channel = ?, member_role = ?, authentication_role = ? WHERE guild_id = ?",
-                entity.getVerificationChannelId(),
+                "UPDATE guild_settings SET welcome_channel = ?, logs_channel = ?, tickets_category = ?, member_role = ?, authentication_role = ? WHERE guild_id = ?",
                 entity.getWelcomeChannelId(),
                 entity.getLogsChannelId(),
-                entity.getTicketsChannelId(),
-                entity.getCartChannelId(),
+                entity.getTicketsCategoryId(),
                 entity.getMemberAutoRoleId(),
                 entity.getMemberAuthenticationRoleId(),
                 entity.getGuildId()
@@ -98,11 +94,9 @@ public class GuildSettingsRepository implements Repository<GuildSettings> {
         instance.getDatabase().update("CREATE TABLE IF NOT EXISTS guild_settings (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "guild_id VARCHAR(20) NULL, " +
-                "verification_channel VARCHAR(20) NULL, " +
                 "welcome_channel VARCHAR(20) NULL, " +
                 "logs_channel VARCHAR(20) NULL, " +
-                "tickets_channel VARCHAR(20) NULL, " +
-                "cart_channel VARCHAR(20) NULL, " +
+                "tickets_category VARCHAR(20) NULL, " +
                 "member_role VARCHAR(20) NULL, " +
                 "authentication_role VARCHAR(20) NULL" +
                 ");"
@@ -113,11 +107,9 @@ public class GuildSettingsRepository implements Repository<GuildSettings> {
         return new GuildSettings(
                 rs.getInt("id"),
                 rs.getString("guild_id"),
-                rs.getString("verification_channel"),
                 rs.getString("welcome_channel"),
                 rs.getString("logs_channel"),
-                rs.getString("tickets_channel"),
-                rs.getString("cart_channel"),
+                rs.getString("tickets_category"),
                 rs.getString("member_role"),
                 rs.getString("authentication_role")
         );

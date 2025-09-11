@@ -31,6 +31,7 @@ public class CommandListener extends ListenerAdapter {
         try {
             command.execute(event, instance);
         } catch (Exception e) {
+            e.printStackTrace();
             event.reply("Tivemos um problema ao executar o comando: " + e.getMessage()).setEphemeral(true).queue();
         }
     }
